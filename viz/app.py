@@ -24,17 +24,17 @@ def home():
 def cocktails():
 
     if request.method == 'GET':
-        cocktail_db_response = mongo.db.recipe_dump.find({}, {'_id': False})
+        cocktail_db_response = mongo.db.recipe_db.find({}, {'_id': False})
         recipes = []
         for recipe in cocktail_db_response:
             # print(recipe)
-            # ratings = []
-            # # print(recipe['rating'])
-            # for k, v in recipe['rating'].items():
-            #     if k == 'rating':
-            #         ratings.append(int(v))
-            # average = round(sum(ratings)/len(ratings))
-            # recipe['avg_rating'] = average
+            ratings = []
+            # print(recipe['rating'])
+            for k, v in recipe['Rating'].items():
+                if k == 'Rating':
+                    ratings.append(int(v))
+            average = round(sum(ratings)/len(ratings))
+            recipe['Averge_Rating'] = average
             recipes.append(recipe)
         # print(recipes)
         return jsonify(recipes)
@@ -53,7 +53,7 @@ def cocktails():
         this_rating = {}
         this_rating['date_time'] = dt.now()
         this_rating['rating'] = rating
-        mongo.db.recipe_dump.update_one({'name': recipe}, {"$set": {'rating': this_rating}}, upsert=True)
+        mongo.db.recipe_db.update_one({'name': recipe}, {"$set": {'rating': this_rating}}, upsert=True)
         return redirect(url_for("home"))
 
 @app.route("/liquid")

@@ -91,9 +91,9 @@ def adjust_measurement(measurement):
         final = f"{round(amount, 2)} " + final
     return final[:-1]
 
-def get_cocktail_recipies(dataframe, ingredient_indicies, liquid_list, garnish_list, invaild_ingredients, valid_units):
+def get_cocktail_recipes(dataframe, ingredient_indices, liquid_list, garnish_list, invaild_ingredients, valid_units):
 
-    all_recipies = []
+    all_recipes = []
     measures = []
     
     liquid_generational = get_word_children(liquid_list)
@@ -110,7 +110,7 @@ def get_cocktail_recipies(dataframe, ingredient_indicies, liquid_list, garnish_l
         drink_recipe = []
         
         # Pull out the ingredients and their measurements
-        for ingredient_index in ingredient_indicies:
+        for ingredient_index in ingredient_indices:
 
             # Ingredients
             ingredients = mung_text(str(dataframe.iloc[row, ingredient_index]))
@@ -173,9 +173,9 @@ def get_cocktail_recipies(dataframe, ingredient_indicies, liquid_list, garnish_l
                       "glass": glass,
                       "glass_size": glass_size,
                       "recipe": drink_recipe}
-        all_recipies.append(drink_info)
+        all_recipes.append(drink_info)
         
-    return all_recipies, measures
+    return all_recipes, measures
 
 
 def find_ingredient(ingredient, ingredient_lists):

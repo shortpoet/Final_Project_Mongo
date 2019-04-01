@@ -569,13 +569,8 @@ df = pd.DataFrame(all_recipies)
 glass_sizes = []
 for glass in glasses:
     sizes = df.loc[df["glass"] == glass, "glass_size"]
-    glass_sizes.append(list(sizes)[0])
-    
-#create glass size dictionary
-glass_size_dict = {}
-for i in range(len(glasses)):
-    glass_size_dict[glasses[i]] = glass_sizes[i]
-glass_size_dict
+
+
 
 text_files = ["MACKs_AI_Classics_2.txt", "MACKs_AI_Classics_5.txt", "MACKs_AI_Classics_10.txt"]
 
@@ -733,7 +728,6 @@ def parse_ai_text(text_file):
 
                                 #add measure to total volume    
                                 total_volume += measure_float
-
             #if more than 6 ingredients, skip
             if len(split_line) > 10:
 #                 print("INGREDIENTS ERRORRRRRRRRRRR")
