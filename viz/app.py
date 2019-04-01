@@ -9,8 +9,9 @@ app = Flask(__name__)
 app.debug = True
 
 # Use flask_pymongo to set up mongo connection
-app.config['MONGO_URI'] = os.environ['MONGODB_URI'] or "mongodb://localhost:27017/cocktail_db"
+# app.config['MONGO_URI'] = os.environ['MONGODB_URI'] or "mongodb://localhost:27017/cocktail_db"
 # app.config['MONGO_URI'] = "mongodb://localhost:27017/cocktail_db"
+app.config['MONGO_URI'] = "mongodb://test:fuck8live@ds041140.mlab.com:41140/heroku_9h70q4d7"
 mongo = PyMongo(app)
 
 # Route to render index.html template using data from Mongo
@@ -23,17 +24,17 @@ def home():
 def cocktails():
 
     if request.method == 'GET':
-        cocktail_db_response = mongo.db.recipe_db.find({}, {'_id': False})
+        cocktail_db_response = mongo.db.recipe_dump.find({}, {'_id': False})
         recipes = []
         for recipe in cocktail_db_response:
             # print(recipe)
-            ratings = []
-            # print(recipe['rating'])
-            for k, v in recipe['rating'].items():
-                if k == 'rating':
-                    ratings.append(int(v))
-            average = round(sum(ratings)/len(ratings))
-            recipe['avg_rating'] = average
+            # ratings = []
+            # # print(recipe['rating'])
+            # for k, v in recipe['rating'].items():
+            #     if k == 'rating':
+            #         ratings.append(int(v))
+            # average = round(sum(ratings)/len(ratings))
+            # recipe['avg_rating'] = average
             recipes.append(recipe)
         # print(recipes)
         return jsonify(recipes)
