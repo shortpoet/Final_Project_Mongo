@@ -3,20 +3,15 @@ from flask_pymongo import PyMongo
 import json
 import re
 from datetime import datetime as dt
-import
+import os
 
 app = Flask(__name__)
 app.debug = True
 
-
 # Use flask_pymongo to set up mongo connection
 app.config['MONGO_URI'] = os.environ['MONGODB_URI'] or "mongodb://localhost:27017/cocktail_db"
+# app.config['MONGO_URI'] = "mongodb://localhost:27017/cocktail_db"
 mongo = PyMongo(app)
-
-# Or set inline
-# mongo = PyMongo(app, uri="mongodb://localhost:27017/cocktail_db")
-
-
 
 # Route to render index.html template using data from Mongo
 @app.route("/")
@@ -73,11 +68,6 @@ def svgs():
 @app.route("/table")
 def table():
     return render_template("table.html")
-
-
-
-
-
 
 if __name__ == "__main__":
     app.run(host='127.0.0.1', port='8000', debug=True)
