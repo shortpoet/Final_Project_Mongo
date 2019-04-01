@@ -1,1 +1,0 @@
-web: gunicorn viz.app:app $PORT
