@@ -1,0 +1,173 @@
+.instrDiv {
+  border: 1px solid black;
+}
+
+.stars {
+  cursor: pointer;
+}
+#ratingGroup {
+  cursor: pointer;
+}
+
+.stars .star polygon {
+  fill: #d8d8d8;
+}
+
+/* ul {
+  padding: 10px 0px 0px 0px;
+} */
+
+/* .stars:hover .star polygon {
+  fill: #ffd055 !important;
+} */
+
+/* .star[data-rating="2"]:hover polygon{
+  fill: #ffd055 !important;
+} */
+
+/* .stars .star {
+  float: left;
+}
+.stars .star polygon {
+  fill: #d8d8d8;
+}
+.stars .star:hover ~ .star polygon {
+  fill: #d8d8d8 !important;
+}
+.stars[data-stars] .star polygon {
+  fill: #ffd055;
+}
+.stars[data-stars="1"] .star:nth-child(1) ~ .star polygon {
+  fill: #d8d8d8;
+}
+.stars[data-stars="1"] .star:nth-child(2) ~ .star polygon {
+  fill: #d8d8d8;
+}
+.stars[data-stars="1"] .star:nth-child(3) ~ .star polygon {
+  fill: #d8d8d8;
+}
+.stars[data-stars="1"] .star:nth-child(4) ~ .star polygon {
+  fill: #d8d8d8;
+}
+.stars[data-stars="1"] .star:nth-child(5) ~ .star polygon {
+  fill: #d8d8d8;
+} */
+
+/* .stars:hover {
+  fill:#ffd055 !important;
+
+} */
+
+.aText {
+  font-family: sans-serif;
+  font-size: 16px;
+  text-anchor: middle;
+}
+
+.active {
+  font-weight: bold;
+  fill: #000;
+  transition: fill 0.3s ease-out;
+  text-anchor: middle;
+}
+
+.inactive {
+  font-weight: lighter;
+  fill: #000;
+  transition: fill 0.3s ease-out;
+  text-anchor: middle;
+}
+
+.inactive:hover {
+  fill: #000;
+  cursor: pointer;
+}
+
+/* font size dependent on radius, see app.js */
+.stateText {
+  font-family: sans-serif;
+  fill: #fff;
+  text-anchor: middle;
+}
+
+.stateCircle {
+  fill: #89bdd3;
+  stroke: #e3e3e3;
+}
+
+.chart {
+  display: block;
+  margin: 0;
+}
+
+.d3-tip {
+  padding: 6px;
+  font-size: 12px;
+  line-height: 1;
+  line-height: 1.5em;
+  color: #fff;
+  text-align: center;
+  text-transform: capitalize;
+  background: rgba(0, 0, 0, 0.8);
+  border-radius: 4px;
+  pointer-events: none !important;
+}
+
+/* Mobile Rules */
+@media screen and (max-width: 530px) {
+  .stateText {
+    display: none;
+  }
+
+  .aText {
+    font-size: 14px;
+  }
+}
+
+@media screen and (max-width: 400px) {
+  .aText {
+    font-size: 13px;
+  }
+}
+
+th.desc:after {
+  content: "\21E9"
+}
+
+th.asc:after {
+  content: "\21E7";
+}
+
+th, .barChart {
+  cursor: pointer;
+}
+
+rect.bar.highlight text {
+  opacity: 1;
+}
+
+rect.bar.highlight rect {
+  fill: Maroon;
+}
+
+body {
+  font: 10px sans-serif;
+}
+
+.xAxis path, .yAxis path,
+.xAxis line, .yAxis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+
+
+.line{
+  fill: none;
+  stroke: steelblue;
+  stroke-width: 1.5px;
+}
+
+
+
