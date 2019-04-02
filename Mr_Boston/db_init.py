@@ -57,59 +57,6 @@ with open('mr_boston_cocktails.txt', 'w') as text_file:
 # POPULATE TABLES #
 ###################
 
-
-### GLASS SVG DATA ###
-#import glass svg data
-svg_data = pd.read_csv("the_glasses.csv")
-svg_dict_list = svg_data.to_dict(orient='records')
-
-for svg in svg_dict_list:
-    if svg['name'] == "Beer Mug":
-           svg['name'] = "fluted_lager"
-    elif (svg['name'] == "Brandy Snifter") or (svg['name'] == "Red-Wine Glass") or (svg['name'] == "White-Wine Glass"):
-        svg['name'] = "poco_grande"                                
-    elif svg['name'] == "Champagne Flute":
-        svg['name'] = "champagne_extra_fluted"                
-    elif svg['name'] == "Cocktail Glass":
-        svg['name'] = "cocktail_lg"
-    elif svg['name'] == "Collins Glass":
-        svg['name'] = "collins"
-    elif (svg['name'] == "Cordial or Pony Glass") or (svg['name'] == "Pousse-Cafe Glass") or (svg['name'] == "Sherry Glass"):
-        svg['name'] = "pousse_cafe"
-    elif svg['name'] == "Highball Glass":
-        svg['name'] = "highball"
-    elif svg['name'] == "Hurricane Glass":
-        svg['name'] = "hurricane"
-    elif svg['name'] == "Irish Coffee Glass":
-        svg['name'] = "irish_coffee"
-    elif svg['name'] == "Old-Fashioned Glass":
-        svg['name'] = "old_fashioned"
-    elif (svg['name'] == "Punch Cup") or (svg['name'] == "Shot Glass"):
-        svg['name'] = "rocks"
-    elif svg['name'] == "Sour Glass":
-        svg['name'] = "champagne_flute"
-
-
-glasses = []
-glass_dicts = []
-for recipe in all_recipes:
-    if recipe['glass'] not in glasses:
-        this_glass = {}
-        this_glass['glass_name'] = recipe['glass']
-        this_glass['glass_size'] = recipe['glass_size']
-        glasses.append(recipe['glass'])
-        glass_dicts.append(this_glass)
-glass_df = pd.DataFrame(glass_dicts)
-
-svg_dict = svg_data.to_dict(orient='records')
-for recipe in all_recipes:
-    for svg in svg_dict_list:
-        if recipe['glass'] == svg['name']:
-            recipe['Mask'] = svg['mask']
-            recipe['Path'] = svg['path']
-            recipe['Mask_Height'] = svg['maskHeight']
-            recipe['Mask_Top_Margin'] = svg['maskTopMargin']
-
 for recipe in all_recipes:
     recipe['Ingredients'] = []
     
@@ -397,6 +344,7 @@ def parse_ai_text(text_file):
                 print(name)
                 recipe['Instructions'] = instructions
                 recipe['Glass'] = glass
+                recipe['Glass_Size'] = glass_volume
                 recipe['Category'] = 'AI Instant Classic'
                 
                 
@@ -440,6 +388,10 @@ for recipe in all_recipes:
                 if ingredient['Liquid'] == color_dict['liquids']:
                     ingredient['Color'] = color_dict['color']
 
+###################
+### ADD RATINGS ###
+###################
+
 for recipe in all_recipes:
     recipe['Ratings'] = []
     for i in range(8):
@@ -448,14 +400,45 @@ for recipe in all_recipes:
         this_rat['date_time'] = dt.now()
         recipe['Ratings'].append(this_rat)
 
-# conn = 'mongodb://test:fuck8live@ds041140.mlab.com:41140/heroku_9h70q4d7'
-conn = 'mongodb://localhost:27017/cocktail_db'
+### GLASS SVG DATA ###
+#import glass svg data
+svg_data = pd.read_csv("the_glasses.csv")
+svg_dict_list = svg_data.to_dict(orient='records')
+
+glasses = []
+glass_dicts = []
+for recipe in all_recipes:
+    if recipe['Glass'] not in glasses:
+        this_glass = {}
+        this_glass['glass_name'] = recipe['Glass']
+        this_glass['glass_size'] = recipe['Glass_Size']
+        glasses.append(recipe['Glass'])
+        glass_dicts.append(this_glass)
+glass_df = pd.DataFrame(glass_dicts)
+
+for recipe in all_recipes:
+    for svg in svg_dict_list:
+        if recipe['Glass'] == svg['name']:
+            print('matching_glass')
+            recipe['Mask'] = svg['mask']
+            recipe['Path'] = svg['path']
+            recipe['Mask_Height'] = svg['maskHeight']
+            recipe['Mask_Top_Margin'] = svg['maskTopMargin']
+
+
+
+conn = 'mongodb://test:fuck8live@ds041140.mlab.com:41140/heroku_9h70q4d7'
+# conn = 'mongodb://localhost:27017/cocktail_db'
 
 client = pymongo.MongoClient(conn)
 
-# mongoDb = client.heroku_9h70q4d7
-mongoDb = client.cocktail_db
+mongoDb = client.heroku_9h70q4d7
+# mongoDb = client.cocktail_db
 
 collection = mongoDb.recipe_db
 
 collection.insert_many(all_recipes)
+
+collection = mongoDb.liquid_colors
+
+collection.insert_many(color_dict_list)

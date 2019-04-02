@@ -1,5 +1,7 @@
 
-var endpoint = 'cocktails'
+var cocktail_endpoint = 'cocktails'
+var liquid_endpoint = 'liquids'
+
 
 // Define SVG area dimensions
 var svgWidth = 720;
@@ -24,73 +26,103 @@ var svg = d3.select("#glasses")
   .attr("height", glassHeight)
   .attr('viewBox', '0 -5 110 911')
 
-function drawInput(endpoint) {
-  d3.json(endpoint).then(function(cocktails) {
-    var recipeNames = cocktails.map(x => x.name);
-    var recipeSet = new Set(recipeNames);
-    var recipeArr = [...recipeSet]
-    var recipeSorted = recipeArr.sort((a,b) => a > b ? 1 : a === b ? 0 : -1);
-    // console.log(recipeSorted)
-    var recSearchBox = d3.select('#recipesSearch').append('div').classed('form-group', true).append('label')
-      .attr('for', 'recipeSearch')
-      .text('Search for Recipe')
-    var recSearchInput = recSearchBox.append('input').classed('form-control', true)
-      .attr('id', 'recipeSearch')
-      .attr('type', 'text')
-      .attr('placeholder', 'Search for Recipe')
-      .attr('aria-label', 'Search for Recipe (autocomplete)')
-    var chosenRecipe = 'Adam and Eve'
-    // drawGlass(endpoint, chosenRecipe)
-    autocomplete(document.getElementById('recipeSearch'), recipeSorted);
-    var recSubmit = recSearchBox.append('button')
-      .attr('type', 'submit')
-      .attr('class', 'btn btn-default')
-      .attr('id', 'recSubmitSearch')
-      .text('Search')
-      .on('click', function(d, i){
-        d3.select('table').remove()
-        var chosenRecipe = document.getElementById('recipeSearch').value
-        console.log(chosenIngred)
-        drawTable(endpoint, chosenRecipe, 'recipe')
-        svg.remove()
-        svg = d3.select("#glasses")
-          .append("svg")
-          .attr('id', 'svg')
-          .attr("width", svgWidth)
-          .attr("height", svgHeight)
-          .attr('viewBox', '0 -5 110 110')
-        var chosenRecipe = document.getElementById('recipeSearch').value
-        console.log(chosenRecipe)
-        drawGlass(endpoint, chosenRecipe)
-      })
-    var ingSearchBox = d3.select('#ingrSearch').append('div').classed('form-group', true).append('label')
-      .attr('for', 'ingredSearch')
-      .text('Search for Ingredient')
-    var ingSearchInput = ingSearchBox.append('input').classed('form-control', true)
-      .attr('id', 'ingredSearch')
-      .attr('type', 'text')
-      .attr('placeholder', 'Search for Ingredient')
-      .attr('aria-label', 'Search for Ingredient (autocomplete)')
-    var ingSubmit = ingSearchBox.append('button')
-      .attr('type', 'submit')
-      .attr('class', 'btn btn-default')
-      .attr('id', 'submitSearch')
-      .text('Search')
-      .on('click', function(d, i){
-        d3.select('table').remove()
-        var chosenIngred = document.getElementById('ingredSearch').value
-        console.log(chosenIngred)
-        drawTable(endpoint, chosenIngred, 'ingredient')
-      })
+function drawInput(cocktail_endpoint) {
+  d3.json(cocktail_endpoint).then(function(cocktails) {
+    d3.json(liquid_endpoint).then(function(liquids){
+      var recipeNames = cocktails.map(x => x.Cocktail_Name);
+      var recipeSet = new Set(recipeNames);
+      var recipeArr = [...recipeSet]
+      var recipeSorted = recipeArr.sort((a,b) => a > b ? 1 : a === b ? 0 : -1);
+      var ingredientNames = liquids.map(x => x.Liquid_Name);
+      var ingredientSet = new Set(ingredientNames);
+      var ingredientArr = [...ingredientSet]
+      var ingredientSorted = ingredientArr.sort((a,b) => a > b ? 1 : a === b ? 0 : -1);
+      var cats = ['Whiskies', 'Vodka', 'Rum - Daiquiris', 'Shooters', 'Tequila', 'Brandy', 'Cocktail Classics', 'Non-alcoholic Drinks', 'Cordials and Liqueurs', 'Gin', 'Rum', 'AI Instant Classic']
+      var catsSorted = cats.sort((a,b) => a > b ? 1 : a === b ? 0 : -1)
+      // console.log(ingredientSorted)
+      var recSearchBox = d3.select('#recipesSearch').append('div').classed('form-group', true).append('label')
+        .attr('for', 'recipeSearch')
+        .text('Search for Recipe')
+      var recSearchInput = recSearchBox.append('input').classed('form-control', true)
+        .attr('id', 'recipeSearch')
+        .attr('type', 'text')
+        .attr('placeholder', 'Search for Recipe')
+        .attr('aria-label', 'Search for Recipe (autocomplete)')
+      var chosenRecipe = 'Adam and Eve'
+      // drawGlass(cocktail_endpoint, chosenRecipe)
+      autocomplete(document.getElementById('recipeSearch'), recipeSorted);
+      var recSubmit = recSearchBox.append('button')
+        .attr('type', 'submit')
+        .attr('class', 'btn btn-default')
+        .attr('id', 'recSubmitSearch')
+        .text('Search')
+        .on('click', function(d, i){
+          d3.select('table').remove()
+          var chosenRecipe = document.getElementById('recipeSearch').value
+          console.log(chosenIngred)
+          drawTable(cocktail_endpoint, chosenRecipe, 'recipe')
+          svg.remove()
+          svg = d3.select("#glasses")
+            .append("svg")
+            .attr('id', 'svg')
+            .attr("width", svgWidth)
+            .attr("height", svgHeight)
+            .attr('viewBox', '0 -5 110 110')
+          var chosenRecipe = document.getElementById('recipeSearch').value
+          console.log(chosenRecipe)
+          drawGlass(cocktail_endpoint, chosenRecipe)
+        })
+      var ingSearchBox = d3.select('#ingrSearch').append('div').classed('form-group', true).append('label')
+        .attr('for', 'ingredSearch')
+        .text('Search for Ingredient')
+      var ingSearchInput = ingSearchBox.append('input').classed('form-control', true)
+        .attr('id', 'ingredSearch')
+        .attr('type', 'text')
+        .attr('placeholder', 'Rum')
+        .attr('aria-label', 'Search for Ingredient (autocomplete)')
+      autocomplete(document.getElementById('ingredSearch'), ingredientSorted);
+      var ingSubmit = ingSearchBox.append('button')
+        .attr('type', 'submit')
+        .attr('class', 'btn btn-default')
+        .attr('id', 'submitSearch')
+        .text('Search')
+        .on('click', function(d, i){
+          d3.select('table').remove()
+          var chosenIngred = document.getElementById('ingredSearch').value
+          console.log(chosenIngred)
+          drawTable(cocktail_endpoint, chosenIngred, 'ingredient')
+        })
 
-    var generate = d3.select('#generate').append('button')
-      .attr('type', 'submit')
-      .attr('class', 'btn btn-default')
-      .attr('id', 'generateButton')
-      .text('Generate')
+      var catSearchBox = d3.select('#catSearch').append('div').classed('form-group', true).append('label')
+        .attr('for', 'catSearch')
+        .text('Search for Category')
+      var catSearchInput = catSearchBox.append('input').classed('form-control', true)
+        .attr('id', 'categSearch')
+        .attr('type', 'text')
+        .attr('placeholder', 'Search for Category')
+        .attr('aria-label', 'Search for Category (autocomplete)')
+      autocomplete(document.getElementById('categSearch'), catsSorted);
+      var catSubmit = catSearchBox.append('button')
+        .attr('type', 'submit')
+        .attr('class', 'btn btn-default')
+        .attr('id', 'submitCatSearch')
+        .text('Search')
+        .on('click', function(d, i){
+          d3.select('table').remove()
+          var chosenCateg = document.getElementById('categSearch').value
+          console.log(chosenIngred)
+          drawTable(cocktail_endpoint, chosenCateg, 'category')
+        })
+
+      var generate = d3.select('#generate').append('button')
+        .attr('type', 'submit')
+        .attr('class', 'btn btn-default')
+        .attr('id', 'generateButton')
+        .text('Generate')
+    })
   })
 }
-drawInput(endpoint)
+drawInput(cocktail_endpoint)
 
 function drawMultiple() {
   d3.json('liquid').then(function(liquids_colors) {
@@ -129,7 +161,7 @@ function drawMultiple() {
     })
   })
 }
-drawMultiple()
+// drawMultiple()
 
 function autocomplete(inp, arr) {
   /*the autocomplete function takes two arguments,
@@ -228,20 +260,24 @@ function autocomplete(inp, arr) {
   });
 }
 
-function drawGlass(endpoint, chosenRecipe) {
-	d3.json(endpoint).then(function(cocktails) {
+function drawGlass(cocktail_endpoint, chosenRecipe, chosenCateg) {
+	d3.json(cocktail_endpoint).then(function(cocktails) {
       // console.log(cocktails)
-      // console.log(chosenRecipe)
-      var recipe = cocktails.filter(datum => datum.name == chosenRecipe)
+      console.log(chosenCateg)
+      var recipe = cocktails.filter(datum => datum.Cocktail_Name == chosenRecipe && datum.Category == chosenCateg)
       console.log(recipe)
-      var maskTopMargin = recipe[0]['maskTopMargin']
-      var maskHeight = recipe[0]['maskHeight']
-      var ings = recipe[0]['ingredients'].map(x=>x)
-      var ingVals = recipe[0]['ingredients'].map(x=>x.replace(/[A-Za-z]/g, '').trim())
-      // console.log(maskTopMargin, maskHeight, ings)
-      var volume = recipe[0]['total_volume']
-      var name = recipe[0]['name']
-      var avg_rating = recipe[0]['avg_rating']
+      var maskTopMargin = recipe[0]['Mask_Top_Margin']
+      var maskHeight = recipe[0]['Mask_Height']
+      var ings = recipe[0]['Ingredients'].map(x=>x.Liquid)
+      var ingVals = recipe[0]['Ingredients'].map(x=>x.Measure_Float)
+      var ingValsRead = recipe[0]['Ingredients'].map(x=>x.Measure)
+      var ingCols = recipe[0]['Ingredients'].map(x=>x.Color).reverse()
+      console.log(maskTopMargin, maskHeight, ings, ingVals)
+      var volume = recipe[0]['Total_Volume']
+      console.log(volume)
+      var name = recipe[0]['Cocktail_Name']
+      var cocktail_id = recipe[0]['Cocktail_ID']
+      var avg_rating = recipe[0]['Average_Rating']
       
       var defs = svg.append('defs')
         .append('g')
@@ -251,7 +287,7 @@ function drawGlass(endpoint, chosenRecipe) {
         .selectAll('path').data(recipe)
         .enter()
         .append('path')
-        .attr('d', d => d.mask)
+        .attr('d', d => d.Mask)
 
       var starDef = svg.append('defs')
         .append('g')
@@ -359,7 +395,7 @@ function drawGlass(endpoint, chosenRecipe) {
       var glassPath = glassGroup.selectAll('path').data(recipe)
         .enter()
         .append('path')
-        .attr('d', d => d.path)
+        .attr('d', d => d.Path)
         .attr('fill', 'none')
         .attr('stroke', '#000')
         .attr('stroke-width', '.265')
@@ -375,13 +411,16 @@ function drawGlass(endpoint, chosenRecipe) {
         .attr('y', maskTopMargin)
         .attr('height', (d,i) => {
           this_arr = ingVals.slice(0, ingVals.length + y)
+          console.log(this_arr)
           this_arr = this_arr.map(x=>x/volume*maskHeight)
+          console.log(this_arr)
+          console.log(this_arr.reduce((a,b)=> a + b, 0))
           y -= 1
           return this_arr.reduce((a,b)=> a + b, 0)
         })
         .attr('width', 60)
         .attr('clip-path', 'url(#clip)') 
-        .style('fill', (d,i) => `rgb(100, ${(i+1)*60}, 100)`)
+        .style('fill', (d,i) => ingCols[i])
 
       var ingrTextGroup = ingrRectGroup.append('g')
         .attr('id', 'ingrTextGroup')
@@ -389,6 +428,7 @@ function drawGlass(endpoint, chosenRecipe) {
 
       var k = 0
       var rectHeights = d3.selectAll('rect').nodes().map(x=>x.getBBox().height).reverse()
+      console.log(rectHeights)
       var ingrText = ingrTextGroup.selectAll('text').data(ings)
         .enter()
         .append('text')
@@ -405,7 +445,7 @@ function drawGlass(endpoint, chosenRecipe) {
             }
           }
         })
-        .text(d => d)  
+        .text((d, i) => ingValsRead[i] + "  -  " + d)  
         .style('font-size', 2)
         .style('fill', 'black')
         .style('text-align', 'center')
@@ -419,8 +459,9 @@ function drawGlass(endpoint, chosenRecipe) {
         .style("stroke", 'black')
         .style("fill", "none")
         .style("stroke-width", .75);
-    
-      var instructions = recipe[0]['instructions']
+      
+      console.log(recipe[0])
+      var instructions = recipe[0]['Instructions']
       instructions = instructions.split('.').slice(0, -1)
       var instrDiv = d3.select('#instructions')
         .style('border', '5px solid black')
@@ -463,19 +504,24 @@ function drawGlass(endpoint, chosenRecipe) {
           .attr('id', 'ratingGroup')
         var ratingForm = instrDiv.append('form')
           .attr('method', 'POST')
-          .attr('action', '/' + endpoint)
+          .attr('action', '/' + cocktail_endpoint)
           .attr('name', 'ratingForm')
           .attr('enctype', 'multipart/form-data')
           .append('input')
           .attr('name', 'submitRating')
           .attr('value', '')
-          .attr('type', 'text')
+          .attr('type', 'hidden')
           .attr('id', 'submitRating')
           .append('input')
           .attr('name', 'submitRecipe')
           .attr('value', '')
-          .attr('type', 'text')
+          .attr('type', 'hidden')
           .attr('id', 'submitRecipe')
+          .append('input')
+          .attr('name', 'submitCocktailID')
+          .attr('value', '')
+          .attr('type', 'hidden')
+          .attr('id', 'submitCocktailID')
 
         var ratingText = ratingGroup.append('text')
           .text(`Click to save ${rating} star rating`)
@@ -547,6 +593,7 @@ function drawGlass(endpoint, chosenRecipe) {
             console.log(rating)
             d3.select('#submitRating').attr('value', rating)
             d3.select('#submitRecipe').attr('value', name)
+            d3.select('#submitCocktailID').attr('value', cocktail_id)
           }
           else {
             isClicked = false
@@ -597,6 +644,7 @@ function drawGlass(endpoint, chosenRecipe) {
             console.log(rating)
             d3.select('#submitRating').attr('value', rating)
             d3.select('#submitRecipe').attr('value', name)
+            d3.select('#submitCocktailID').attr('value', cocktail_id)
           }
           else {
             isClicked = false
@@ -653,6 +701,7 @@ function drawGlass(endpoint, chosenRecipe) {
             console.log(rating)
             d3.select('#submitRating').attr('value', rating)
             d3.select('#submitRecipe').attr('value', name)
+            d3.select('#submitCocktailID').attr('value', cocktail_id)
           }
           else {
             isClicked = false
@@ -715,6 +764,7 @@ function drawGlass(endpoint, chosenRecipe) {
             console.log(rating)
             d3.select('#submitRating').attr('value', rating)
             d3.select('#submitRecipe').attr('value', name)
+            d3.select('#submitCocktailID').attr('value', cocktail_id)
           }
           else {
             isClicked = false
@@ -784,6 +834,7 @@ function drawGlass(endpoint, chosenRecipe) {
             console.log(rating)
             d3.select('#submitRating').attr('value', rating)
             d3.select('#submitRecipe').attr('value', name)
+            d3.select('#submitCocktailID').attr('value', cocktail_id)
           }
           else {
             isClicked = false
@@ -820,14 +871,14 @@ function styleImportedSVG () {
         })
     })
 }
-function drawTable(endpoint, chosenParam, paramType) {
-	d3.json(endpoint).then(function(recipe_dump) {
+function drawTable(cocktail_endpoint, chosenParam, paramType) {
+	d3.json(cocktail_endpoint).then(function(recipe_dump) {
     console.log(recipe_dump)
     var chosenRecipes = []
     if (paramType === 'ingredient') {
       var recipeFilter = recipe_dump.filter(recipe => {
-        recipe['ingredients'].forEach(ingredient => {
-          if (ingredient.includes(chosenParam)) {
+        recipe['Ingredients'].forEach(ingredient => {
+          if (ingredient['Liquid'].includes(chosenParam)) {
             chosenRecipes.push(recipe)
             return true;
           }
@@ -835,11 +886,24 @@ function drawTable(endpoint, chosenParam, paramType) {
     })
     }
     else if (paramType === 'recipe') {
-      var chosenRecipes = recipe_dump.filter(datum => datum.name == chosenParam)
+      var chosenRecipes = recipe_dump.filter(datum => datum.Cocktail_Name == chosenParam)
+    }
+    else if (paramType === 'category') {
+      var chosenRecipes = recipe_dump.filter(datum => datum.Category == chosenParam)
+    }
+    function ingrColumn(ings) {
+      liqs = []
+      ings.forEach(ing => {
+        liqs.push(ing['Measure'] + ' ' + ing['Liquid'])
+      })
+      return liqs
     }
     console.log(chosenRecipes)
-		var headers = d3.keys(recipe_dump[0])
-		headers = headers.slice(9,10).concat(headers.slice(2,6))
+    var headers = d3.keys(recipe_dump[0])
+    console.log(headers)
+    headers = headers.slice(2,3).concat(headers.slice(1,2)).concat(headers.slice(0,1)).concat(headers.slice(3,5))
+    .concat(headers.slice(5,7))
+    console.log(headers)
 		var dataTable = d3.select('#table').append('table').attr('class', 'datatable table table-striped');
 		var header = dataTable.append('thead').selectAll('th').data(headers).enter()
 			.append('th')
@@ -851,9 +915,10 @@ function drawTable(endpoint, chosenParam, paramType) {
 		var content = tbody.selectAll('tr').data(chosenRecipes).enter()
 			.append('tr')
 			.html((data, i) => (`
-			  <td class="col_0 row_${i + 1}">${data.name}</td><td class="col_1 row_${i + 1}">${data.glass_size}</td>
-				<td class="col_2 row_${i + 1}">${data.glass_type}</td><td class="col_3 row_${i + 1}">${data.ingredients}</td>
-				<td class="col_4 row_${i + 1}">${data.instructions}</td>
+			  <td class="col_0 row_${i + 1}">${data.Cocktail_Name}</td><td class="col_1 row_${i + 1}">${data.Category}</td>
+				<td class="col_2 row_${i + 1}">${data.Average_Rating}</td><td class="col_3 row_${i + 1}">${data.Glass}</td>
+        <td class="col_4 row_${i + 1}">${data.Glass_Size}</td><td class="col_5 row_${i + 1}">${ingrColumn(data.Ingredients)}</td>
+        <td class="col_7 row_${i + 1}">${data.Instructions}</td>
 				`
 			))
 			.on('mouseover', function(d, i) {
@@ -874,9 +939,11 @@ function drawTable(endpoint, chosenParam, paramType) {
           .attr("width", svgWidth)
           .attr("height", svgHeight)
           .attr('viewBox', '0 -5 110 110')
-        var chosenRecipe = this.__data__.name
+        var chosenRecipe = this.__data__.Cocktail_Name
+        var chosenCateg = this.__data__.Category
+        console.log(chosenCateg)
         console.log(this)
-        drawGlass(endpoint, chosenRecipe)
+        drawGlass(cocktail_endpoint, chosenRecipe, chosenCateg)
         document.getElementById('glasses').scrollIntoView()      
       })
 		var sortAscending = true
@@ -909,4 +976,4 @@ function drawTable(endpoint, chosenParam, paramType) {
 }
 var chosenIngred = 'rum'
 var paramType = 'ingredient'
-drawTable(endpoint, chosenIngred, paramType)
+drawTable(cocktail_endpoint, chosenIngred, paramType)
