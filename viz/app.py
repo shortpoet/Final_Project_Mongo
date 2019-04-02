@@ -4,6 +4,7 @@ import json
 import re
 from datetime import datetime as dt
 import os
+from config import config
 
 app = Flask(__name__)
 app.debug = True
@@ -11,7 +12,7 @@ app.debug = True
 # Use flask_pymongo to set up mongo connection
 # app.config['MONGO_URI'] = os.environ['MONGODB_URI'] or "mongodb://localhost:27017/cocktail_db"
 # app.config['MONGO_URI'] = "mongodb://localhost:27017/cocktail_db"
-app.config['MONGO_URI'] = "mongodb://test:fuck8live@ds041140.mlab.com:41140/heroku_9h70q4d7"
+app.config['MONGO_URI'] = config
 mongo = PyMongo(app)
 
 # Route to render index.html template using data from Mongo
