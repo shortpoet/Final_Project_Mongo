@@ -427,8 +427,7 @@ for recipe in all_recipes:
 
 
 
-conn = 'mongodb://test:fuck8live@ds041140.mlab.com:41140/heroku_9h70q4d7'
-# conn = 'mongodb://localhost:27017/cocktail_db'
+conn = 'mongodb://localhost:27017/cocktail_db'
 
 client = pymongo.MongoClient(conn)
 
