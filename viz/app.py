@@ -4,7 +4,7 @@ import json
 import re
 from datetime import datetime as dt
 import os
-from config import config
+# from config import config
 
 app = Flask(__name__)
 app.debug = True
