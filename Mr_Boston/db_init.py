@@ -448,9 +448,13 @@ for recipe in all_recipes:
         this_rat['date_time'] = dt.now()
         recipe['Ratings'].append(this_rat)
 
-conn = 'mongodb://test:fuck8live@ds041140.mlab.com:41140/heroku_9h70q4d7'
+# conn = 'mongodb://test:fuck8live@ds041140.mlab.com:41140/heroku_9h70q4d7'
+conn = 'mongodb://localhost:27017/cocktail_db'
+
 client = pymongo.MongoClient(conn)
-mongoDb = client.heroku_9h70q4d7
+
+# mongoDb = client.heroku_9h70q4d7
+mongoDb = client.cocktail_db
 
 collection = mongoDb.recipe_db
 
